@@ -36,6 +36,7 @@ class Function {
 	protected void setArgs(Object[] args) {
 		this.args = args;
 	}
+	@SuppressWarnings("unchecked")
 	protected <K> K call(Class<K> returnType,Object...args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		switch(type){
 			case PARTIAL:
@@ -44,8 +45,9 @@ class Function {
 				return (K)method.invoke(context, args);
 		}
 	}
-	private Object[] applyParameters(Class[]parameterTypes,boolean isVarArgs,Object...newArgs){
-		Class varArgsType=isVarArgs?parameterTypes[parameterTypes.length-1]:null;
+	@SuppressWarnings({"rawtypes","unchecked"})
+	private Object[] applyParameters(Class<?>[]parameterTypes,boolean isVarArgs,Object...newArgs){
+		Class<?> varArgsType=isVarArgs?parameterTypes[parameterTypes.length-1]:null;
 		int paramLengthWithoutVarargs = isVarArgs?args.length-1:args.length;
 		Object[] methodArgs = new Object[args.length];
 		int j=0;
