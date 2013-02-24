@@ -74,11 +74,25 @@ class Function {
 				try{
 					returnObject = (K)method.invoke(context, applyParameters(method.getParameterTypes(),method.isVarArgs(),args));
 					success = true;
+				}catch(IllegalAccessException e){
+					if(this.onError!=null){
+						this.onError.call(e);
+					}
+					throw e;
+				}catch(IllegalArgumentException e){
+					if(this.onError!=null){
+						this.onError.call(e);
+					}
+					throw e;
+				}catch(InvocationTargetException e){
+					if(this.onError!=null){
+						this.onError.call(e);
+					}
+					throw e;
 				}catch(Throwable t){
 					if(this.onError!=null){
 						this.onError.call(t);
 					}
-					throw t;
 				}
 				if(success && this.onSuccess!=null){
 					this.onSuccess.call(returnObject);
