@@ -15,7 +15,10 @@ class ProxyFactory<T> implements MethodInterceptor {
 	@SuppressWarnings("unchecked")
 	protected static <T> T create(T object) throws InstantiationException, IllegalAccessException{
 		Enhancer enhancer = new Enhancer();
-		enhancer.setSuperclass(object.getClass());
+		if(!object.getClass().isAnonymousClass()){
+			enhancer.setSuperclass(object.getClass());
+		}
+		enhancer.setInterfaces(object.getClass().getInterfaces());
 		enhancer.setCallback(new ProxyFactory<T>(object));
 		return (T)enhancer.create();
 	}
