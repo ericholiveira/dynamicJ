@@ -5,11 +5,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Vector;
 
+import br.rj.eso.closure.exception.ClosureException;
+
 class Function {
 	Object context;
 	Method method;
 	Object[] args;
 	FunctionType type;
+	Closure<?> onSuccess;
+	Closure<?> onError;
 
 	protected Function(Object context, Method method, FunctionType type,
 			Object... args) {
@@ -43,14 +47,45 @@ class Function {
 	protected void setArgs(Object[] args) {
 		this.args = args;
 	}
+	
+
+	public Closure<?> getOnSuccess() {
+		return onSuccess;
+	}
+
+	public void setOnSuccess(Closure<?> onSuccess) {
+		this.onSuccess = onSuccess;
+	}
+
+	public Closure<?> getOnError() {
+		return onError;
+	}
+
+	public void setOnError(Closure<?> onError) {
+		this.onError = onError;
+	}
 
 	@SuppressWarnings("unchecked")
-	protected <K> K call(Class<K> returnType, Object...args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+	protected <K> K call(Class<K> returnType, Object...args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClosureException{
 		switch(type){
 			case SYNC:
-				return (K)method.invoke(context, applyParameters(method.getParameterTypes(),method.isVarArgs(),args));
+				K returnObject =null;
+				boolean success = false;
+				try{
+					returnObject = (K)method.invoke(context, applyParameters(method.getParameterTypes(),method.isVarArgs(),args));
+					success = true;
+				}catch(Throwable t){
+					if(this.onError!=null){
+						this.onError.call(t);
+					}
+					throw t;
+				}
+				if(success && this.onSuccess!=null){
+					this.onSuccess.call(returnObject);
+				}
+				return returnObject;
 			default :
-				AsyncFunctionThread asyncFunction = new AsyncFunctionThread(method, context, applyParameters(method.getParameterTypes(),method.isVarArgs(),args));
+				AsyncFunctionThread asyncFunction = new AsyncFunctionThread(method, context, applyParameters(method.getParameterTypes(),method.isVarArgs(),args),this.onSuccess,this.onError);
 				asyncFunction.start();
 				return null;
 		}

@@ -2,6 +2,7 @@ package br.rj.eso.closure;
 
 import java.lang.reflect.InvocationTargetException;
 
+import br.rj.eso.closure.exception.ClosureException;
 import br.rj.eso.closure.exception.ClosureIllegalAccessException;
 import br.rj.eso.closure.exception.ClosureIllegalArgumentException;
 import br.rj.eso.closure.exception.ClosureInstantiationException;
@@ -41,15 +42,28 @@ public class Closure<K> {
 
 	@SuppressWarnings("rawtypes")
 	public static Closure closure(FunctionType type, Object method) {
-		return new Closure(lastFunction.get());
+		return closure(type,method,null,null);
 	}
 	@SuppressWarnings("rawtypes")
 	public static Closure closureLast() {
-		return new Closure(lastFunction.get());
+		return closure(null,null,null,null);
 	}
+	@SuppressWarnings("rawtypes")
+	public static Closure closure(FunctionType type, Object method, Closure onSuccess , Closure onError) {
+		Function function = lastFunction.get();
+		function.setOnSuccess(onSuccess);
+		function.setOnError(onError);
+		return new Closure(function);
+	}
+	@SuppressWarnings("rawtypes")
+	public static Closure closureLast(Closure onSuccess , Closure onError) {
+		return closure(null,null,onSuccess,onError);
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	public K call(Object... args) throws ClosureIllegalAccessException,
-			ClosureIllegalArgumentException, ClosureInvocationTargetException {
+			ClosureIllegalArgumentException, ClosureInvocationTargetException, ClosureException {
 		try {
 			return (K) targetFunction.call(targetFunction.getMethod()
 					.getReturnType(), args);

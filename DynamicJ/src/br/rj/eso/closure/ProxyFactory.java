@@ -25,7 +25,7 @@ class ProxyFactory<T> implements MethodInterceptor {
 			MethodProxy arg3) throws Throwable {
 		FunctionType lastFunctionType = FunctionTypeFactory.getLastFunctionType();
 		if(lastFunctionType!=null){
-			Function function = new Function(originalObject,method,lastFunctionType,args);;
+			Function function = new Function(originalObject,method,lastFunctionType,args);
 			Closure.setLastFunction(function);
 			return null;
 		}else{
