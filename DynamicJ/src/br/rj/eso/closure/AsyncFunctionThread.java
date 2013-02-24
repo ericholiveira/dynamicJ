@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 import br.rj.eso.closure.exception.ClosureException;
 
-public class AsyncFunctionThread extends Thread {
+class AsyncFunctionThread extends Thread {
 
 	Method method;
 	Object context;
@@ -12,7 +12,7 @@ public class AsyncFunctionThread extends Thread {
 	Closure<?> onSuccess;
 	Closure<?> onError;
 
-	public AsyncFunctionThread(Method method, Object context, Object[] args,
+	protected AsyncFunctionThread(Method method, Object context, Object[] args,
 			Closure<?> onSuccess, Closure<?> onError) {
 		super();
 		this.method = method;

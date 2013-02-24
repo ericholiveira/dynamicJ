@@ -41,7 +41,7 @@ public class Closure<K> {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static Closure closure(FunctionType type, Object method) {
+	public static Closure closure(FunctionTypeFactory.FunctionType type, Object method) {
 		return closure(type,method,null,null);
 	}
 	@SuppressWarnings("rawtypes")
@@ -49,7 +49,7 @@ public class Closure<K> {
 		return closure(null,null,null,null);
 	}
 	@SuppressWarnings("rawtypes")
-	public static Closure closure(FunctionType type, Object method, Closure onSuccess , Closure onError) {
+	public static Closure closure(FunctionTypeFactory.FunctionType type, Object method, Closure onSuccess , Closure onError) {
 		Function function = lastFunction.get();
 		function.setOnSuccess(onSuccess);
 		function.setOnError(onError);

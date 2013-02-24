@@ -15,7 +15,9 @@ class ProxyFactory<T> implements MethodInterceptor {
 	@SuppressWarnings("unchecked")
 	protected static <T> T create(T object) throws InstantiationException, IllegalAccessException{
 		Enhancer enhancer = new Enhancer();
-		if(!object.getClass().isAnonymousClass()){
+		if(object.getClass().isAnonymousClass()){
+			enhancer.setSuperclass(object.getClass().getSuperclass());
+		}else{
 			enhancer.setSuperclass(object.getClass());
 		}
 		enhancer.setInterfaces(object.getClass().getInterfaces());
@@ -26,7 +28,7 @@ class ProxyFactory<T> implements MethodInterceptor {
 	@Override
 	public Object intercept(Object proxy, Method method, Object[] args,
 			MethodProxy arg3) throws Throwable {
-		FunctionType lastFunctionType = FunctionTypeFactory.getLastFunctionType();
+		FunctionTypeFactory.FunctionType lastFunctionType = FunctionTypeFactory.getLastFunctionType();
 		if(lastFunctionType!=null){
 			Function function = new Function(originalObject,method,lastFunctionType,args);
 			Closure.setLastFunction(function);

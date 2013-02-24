@@ -15,4 +15,10 @@ public class FunctionTypeFactory {
 		lastFunctionType.set(null);
 		return last;
 	}
+	
+	protected enum FunctionType {
+		SYNC,
+		ASYNC;
+	}
+
 }

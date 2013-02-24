@@ -11,11 +11,11 @@ class Function {
 	Object context;
 	Method method;
 	Object[] args;
-	FunctionType type;
+	FunctionTypeFactory.FunctionType type;
 	Closure<?> onSuccess;
 	Closure<?> onError;
 
-	protected Function(Object context, Method method, FunctionType type,
+	protected Function(Object context, Method method, FunctionTypeFactory.FunctionType type,
 			Object... args) {
 		super();
 		this.context = context;
