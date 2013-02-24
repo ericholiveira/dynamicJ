@@ -2,12 +2,12 @@ package br.rj.eso.closure;
 
 public class FunctionTypeFactory {
 	private static ThreadLocal<FunctionType> lastFunctionType = new ThreadLocal<FunctionType>();
-	public static FunctionType empty(){
-		lastFunctionType.set(FunctionType.EMPTY);
+	public static FunctionType sync(){
+		lastFunctionType.set(FunctionType.SYNC);
 		return lastFunctionType.get();
 	}
-	public static FunctionType partial(){
-		lastFunctionType.set(FunctionType.PARTIAL);
+	public static FunctionType async(){
+		lastFunctionType.set(FunctionType.ASYNC);
 		return lastFunctionType.get();
 	}
 	protected static FunctionType getLastFunctionType(){
