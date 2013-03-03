@@ -116,8 +116,9 @@ class Function {
 		int j = 0;
 		for (int i = 0; i < paramLengthWithoutVarargs; i++) {
 			if (args[i] == null) {
-				if (newArgs != null
+				if (newArgs != null 
 						&& j < newArgs.length
+						&& newArgs[j]!=null
 						&& parameterTypes[i].isAssignableFrom(newArgs[j]
 								.getClass())) {
 					methodArgs[i] = newArgs[j];
@@ -141,7 +142,7 @@ class Function {
 					v.add(defaultVarArgs[i]);
 				}
 				for (; j < newArgs.length; i++, j++) {
-					if (varArgsType.getComponentType().isAssignableFrom(
+					if (newArgs!=null && newArgs[j]!=null && varArgsType.getComponentType().isAssignableFrom(
 							newArgs[j].getClass())) {
 						v.add(newArgs[j]);
 					}
